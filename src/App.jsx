@@ -1,19 +1,19 @@
-import React from 'react';
-import { useState } from 'react';
-
+import React, { useState, useEffect, useCallback } from 'react';
 import MoviesList from './components/MoviesList';
+// import Preloader from './components/Preloader/Preloader';
 import Preloader from './components/Preloder/Preloader';
 import './App.css';
 
 function App() {
-  const [movies, setMovies] = useState([]); // State to store fetched movies
+  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [iserror, setError] = useState(null)
+  const [isError, setError] = useState(null);
 
-  const fetchMoviesHandler = async () => {
+
+  const fetchMoviesHandler = useCallback( async () => {
     try {
       setLoading(true);
-      setError(null)
+      setError(null);
       const response = await fetch('https://swapi.dev/api/films');
       if (!response.ok) {
         throw new Error('Failed to fetch movies');
@@ -22,42 +22,39 @@ function App() {
       const data = await response.json();
       const fetchedMovies = data.results;
 
-      setMovies(fetchedMovies); // Update the state with fetched movies
+      setMovies(fetchedMovies);
     } catch (error) {
       console.error('Fetch error:', error);
       setError(error);
+    } finally {
+      setLoading(false);
     }
-    finally {
-      setLoading(false); // Set loading to false when the fetch is complete (success or error)
-    }
+  },[]);
 
+  
+  useEffect(()=>{
+    fetchMoviesHandler();
+  },[fetchMoviesHandler])
 
-  };
+  let content = <p>No movies found...</p>;
 
-  var content;
-
-  if(iserror){
-    content = <p>{iserror}</p>
-  }
-  if(loading){
-    content =  <Preloader loading={loading} />
-  }
-  if(movies.length > 0  ){
-content = <MoviesList movies={movies} />
-  }
-  if(null){
-    content = 'nothing is here '
+  if (isError) {
+    content = <p>{isError.message}</p>; // Use .message to access the error message
+  } else if (loading) {
+    content = <Preloader loading={loading} />;
+  } else if (movies.length > 0) {
+    content = <MoviesList movies={movies} />;
   }
 
-  return (  
+  return (
     <React.Fragment>
       <section>
+        {/* Trigger fetchMoviesHandler when the button is clicked */}
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
-      <section>
-     {content}
-      </section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
+
 export default App;
