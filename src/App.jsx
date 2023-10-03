@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import MoviesList from './components/MoviesList';
-// import Preloader from './components/Preloader/Preloader';
-import Preloader from './components/Preloder/Preloader';
-import './App.css';
+import React, { useState, useEffect, useCallback } from "react";
+import MoviesList from "./components/MoviesList";
+import Preloader from "./components/Preloder/Preloader";
+import MovieForm from "./components/Form/Form";
+import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isError, setError] = useState(null);
 
-
-  const fetchMoviesHandler = useCallback( async () => {
+  const fetchMoviesHandler = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('https://swapi.dev/api/films');
+      const response = await fetch("https://swapi.dev/api/films");
       if (!response.ok) {
-        throw new Error('Failed to fetch movies');
+        throw new Error("Failed to fetch movies");
       }
 
       const data = await response.json();
@@ -24,17 +23,16 @@ function App() {
 
       setMovies(fetchedMovies);
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Fetch error:", error);
       setError(error);
     } finally {
       setLoading(false);
     }
-  },[]);
+  }, []);
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     fetchMoviesHandler();
-  },[fetchMoviesHandler])
+  }, [fetchMoviesHandler]);
 
   let content = <p>No movies found...</p>;
 
@@ -49,7 +47,9 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        {/* Trigger fetchMoviesHandler when the button is clicked */}
+        <MovieForm/>
+      </section>
+      <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>{content}</section>
