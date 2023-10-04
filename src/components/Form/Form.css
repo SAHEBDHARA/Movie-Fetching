@@ -8,15 +8,18 @@
   
   form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: 10px;
+    width: 100%;
+
   }
   
   .form-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
   
   label {
@@ -30,6 +33,10 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+  }
+  #description{
+    height: 100px;
+
   }
   
   button {

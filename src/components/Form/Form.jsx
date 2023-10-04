@@ -1,12 +1,12 @@
 // MovieForm.js
-import React, { useState } from 'react';
-import './Form.css'
+import React, { useState } from "react";
+import "./Form.css";
 
-const MovieForm = () => {
+const MovieForm = ({ onAddMovie }) => {
   const [movieData, setMovieData] = useState({
-    name: '',
-    date: '',
-    description: '',
+    name: "",
+    date: "",
+    description: "",
   });
 
   const handleChange = (event) => {
@@ -19,13 +19,13 @@ const MovieForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission here, e.g., send data to a server
-    console.log(movieData);
+    // console.log(movieData);
+    onAddMovie(movieData);
     setMovieData({
-        name: '',
-    date: '',
-    description: '',
-    })
+      name: "",
+      date: "",
+      description: "",
+    });
   };
 
   return (
@@ -46,7 +46,7 @@ const MovieForm = () => {
         <div className="form-group">
           <label htmlFor="date">Release Date:</label>
           <input
-            type="date"
+            type="text"
             id="date"
             name="date"
             value={movieData.date}
